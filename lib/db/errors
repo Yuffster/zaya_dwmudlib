@@ -25,8 +25,7 @@ CREATE TABLE errors (
   Name varchar(255) default '',
   Reporter varchar(13) NOT NULL default '',
   Fixer varchar(13) default NULL,
-  Status enum('OPEN','FIXING','CONSIDERING','DENIED','FIXED') NOT NULL default '
-OPEN',
+  Status enum('OPEN','FIXING','CONSIDERING','DENIED','FIXED') NOT NULL default 'OPEN',
   Report text,
   Runtime text,
   AssignedTo varchar(20) default NULL,
@@ -35,7 +34,7 @@ OPEN',
   KEY Status (Status),
   KEY Filename (Filename),
   KEY Directory (Directory)
-) TYPE=ISAM PACK_KEYS=1;
+) ENGINE=MyISAM PACK_KEYS=1;
 
 #
 # Table structure for table 'forwards'
@@ -62,7 +61,7 @@ CREATE TABLE bugstats (
   totaltypos int(11) default NULL,
   PRIMARY KEY  (weekend),
   UNIQUE KEY weekend (weekend)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 ##
 ## Table structure for table 'domainstats'
@@ -80,7 +79,7 @@ CREATE TABLE domainstats (
   PRIMARY KEY  (weekend,domain),
   KEY domain (domain),
   KEY weekend (weekend)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 ##
 ## Table structure for table 'error_replies'
@@ -98,7 +97,7 @@ CREATE TABLE error_replies (
   PRIMARY KEY  (id),
   KEY recipient (recipient),
   KEY bug_id (bug_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # Table struct for 'fixedstats'

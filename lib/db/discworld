@@ -34,7 +34,7 @@ CREATE TABLE cluster_members (
 #
 CREATE TABLE roomexit (
   id varchar(255) DEFAULT '' NOT NULL,
-  exit varchar(15),
+  `exit` varchar(15),
   dest varchar(255),
   KEY bing (id)
 );
