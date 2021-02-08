@@ -1,14 +1,41 @@
-/* Do not remove the headers from this file! see /USAGE for more info. */
+#ifndef __SYS__WEAPON
+#define __SYS__WEAPON
 
-#ifndef __WEAPON_H__
-#define __WEAPON_H__
+/**
+ * These macros are used to index the array returned by query_attack_data() in
+ * /std/weapon_logic.c
+ */
+#define W_ARRAY_SIZE 5
+#define W_CHANCE     0
+#define W_DAMAGE     1
+#define W_TYPE       2
+#define W_SKILL      3
+#define W_FUNCTION   4
 
+/**
+ * The W_DAMAGE index of query_attack_data() can be an integer or a three
+ * index array. These macros index that array.
+ */
+#define F_FIXED  0
+#define F_NUM    1
+#define F_DIE    2
 
-#define	DEST 		1		// action code for decay
+/**
+ * These macros index the armour_types data stored in /std/armour_logic.c
+ * Quite why they're in weapon.h is beyond me -- Ceres.
+ */
+#define A_ARRAY_SIZE 2
+#define A_NAME       0
+#define A_TYPE       1
+#define A_AC         0
 
-#define	MAX_AC		3		// balance defines
-#define	MAX_WC		20
-#define MAX_BONUS	6
-#define	MAX_POISON	10
-
-#endif /* __WEAPON_H__ */
+/**
+ * These macros are used to index the array returned by weapon_attacks() in
+ * /std/weapon_logic.c
+ */
+#define AT_ARRAY_SIZE 4
+#define AT_DAMAGE    0
+#define AT_SKILL     1
+#define AT_TYPE      2
+#define AT_NAME      3
+#endif /* __SYS__WEAPON */
