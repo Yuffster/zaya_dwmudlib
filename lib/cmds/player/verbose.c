@@ -1,65 +1,54 @@
-/*  -*- LPC -*-  */
+/* Do not remove the headers from this file! see /USAGE for more info. */
+
 /*
- * $Locker:  $
- * $Id: verbose.c,v 1.4 2000/09/02 22:29:19 ceres Exp $
- * $Log: verbose.c,v $
- * Revision 1.4  2000/09/02 22:29:19  ceres
- * Added error message
- *
- * Revision 1.3  2000/04/27 01:20:26  pinkfish
- * Add some brackets in.
- *
- * Revision 1.2  1999/02/13 20:57:00  ceres
- * Newbie error = instead of ==
- *
- * Revision 1.1  1999/02/09 01:30:25  ceres
- * Initial revision
- *
- * Revision 1.4  1999/02/09 00:23:41  ceres
- * Increased the max email address length to 50.
- *
- * Revision 1.2  1999/02/03 00:52:50  pinkfish
- * Fix it up so you can only enter certain sized bits of data into the fields.
- *
- * Revision 1.1  1998/01/06 05:29:43  ceres
- * Initial revision
- * 
+** verbose.c
+**
 */
-inherit "/cmds/base";
 
-#define TP this_player()
+//:PLAYERCOMMAND
+//$$ see: brief
+//USAGE verbose
+//      verbose on|off
+//
+//This shows whether you are using verbose or brief mode, and allows you to
+//switch between them.
+//
+//Room descriptions are suppressed in "brief" mode, so beware of unexpected
+//encounters if you choose to use it...
 
-int cmd(string which, string type) {
-  string t, disp;
+#include <playerflags.h>
+#define USAGE "Usage: verbose [on|off]\n"
 
-  if(!type) {
-    disp = "Your settings are: ";
-    foreach(t in TP->query_verbose_types()) {
-      disp += t + (TP->query_verbose(t) ? " (verbose) " : " (brief) ");
-    }
-    write(disp + "\n");
-    return 1;
-  }
+inherit CMD;
 
-  if(type == "all") {
-    foreach(t in TP->query_verbose_types()) {
-      TP->set_verbose(t, which == "verbose");
-    }
-    write("Ok\n");
-    return 1;
-  } else if(member_array(type, TP->query_verbose_types()) != -1) {
-    TP->set_verbose(type, which == "verbose");
-    write("Ok\n");
-    return 1;
-  } else {
-    write("No such option.\n");
-    return 1;
-  }
+private string query_setting()
+{
+    return this_body()->test_flag(F_BRIEF) ? "off" : "on";
 }
 
+nomask private void main(string arg)
+{
+    if ( !arg || arg == "" )
+    {
+	out("Verbose mode is " + query_setting() +
+	      ".\n" + USAGE);
+	return;
+    }
 
-mixed *query_patterns() {
-  return ({ "<word'type'>", (: cmd("verbose", $4[0]) :),
-            "", (: cmd("verbose", 0) :),
-         });
-} /* query_patterns() */
+    switch ( arg )
+    {
+    case "on":
+	this_body()->clear_flag(F_BRIEF);
+	break;
+
+    case "off":
+	this_body()->set_flag(F_BRIEF);
+	break;
+
+    default:
+	out(USAGE);
+	return;
+    }
+
+    out("Verbose mode is now " + query_setting() + ".\n");
+}

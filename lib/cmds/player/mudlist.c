@@ -1,152 +1,165 @@
-/*  -*- LPC -*-  */
+/* Do not remove the headers from this file! see /USAGE for more info. */
+
+//:PLAYERCOMMAND
+//USAGE:	mudlist	or mudlist <pattern>
+//
+//This command gives a full list of all muds and their addresses that
+//this mud knows about.  If you supply a pattern, the command only tells
+//you what muds match the pattern.
+//
+//
+//Examples:
+//
+//mudlist	-- get all muds
+//mudlist mud	-- get all muds that contain "mud" somewhere
+//			in their name
+//mudlist ^foo	-- get all muds whose name starts with "foo"
+
+inherit CMD;
+inherit M_GLOB;
+inherit M_REGEX;
+
 /*
- * $Locker:  $
- * $Id: mudlist.c,v 1.3 2002/07/18 23:21:36 ceres Exp $
- * $Log: mudlist.c,v $
- * Revision 1.3  2002/07/18 23:21:36  ceres
- * Added baselib
- *
- * Revision 1.2  2000/03/21 21:04:38  ceres
- * Fixed typo
- *
- * Revision 1.1  1998/01/06 05:29:43  ceres
- * Initial revision
- * 
+** Pairs of info for each column.  ( header-index, field-width )
+** The header indices can be seen from the headers[] *below.
+**
+** NOTE: at the moment, the first two elements must specify the "Up"
+**       state and the mud name
 */
-/*    /cmds/player/mudlist.c
- *    from the Nightmare IV LPC Library
- *    gives information about muds
- *    created by Descartes of Borg 950623
- *    Modified for Discworld by Turrican 1-11-95
- */
+#define INFO_DRIVERTYPE ({ \
+    ({ 0, 2 }), ({ 11, 18 }), \
+    ({8,8}),({ 7, 20 }), ({ 5, 18 })})
 
-#define INTERMUD_D "/net/intermud3/intermud"
+#define INFO_MUDTYPE	({ \
+    ({ 0, 2 }), ({ 11, 18 }), \
+    ({8,8}),({ 1, 15 }), ({ 2, 5 }), ({ 5, 18 })})
 
-int cmd(string str) {
-  mixed *info;
-  string *list;
-  mapping borg;
-  string mud;
-  
-  if( str && str != "") {
-    mapping tmp;
-    string opt, tmpstr;
-    
-    tmp = (mapping)INTERMUD_D->GetMudList();
-    if( str[0] != '-' ) str = "-n " + str;
-    opt = str[1..1];
-    str = str[3..];
-    borg = ([]);
-    foreach(mud, info in tmp) {
-      int x, y, z;
-      
-      switch(opt) {
-      case "m":
-        x = 5;
-        break;
-      case "d":
-        x = 7;
-        break;
-      case "n":
-        x = 0;
-        break;
-      }
-      tmpstr = (x ? info[x] : mud);
-      z = strlen(str = replace_string(lower_case(str), " ", ""));
-      y = strlen(tmpstr = replace_string(lower_case(tmpstr), " ", ""));
-      if( str == tmpstr ) {
-        borg = ([ mud : info ]);
-        break;
-      }
-      else if( y > z && tmpstr[0..z-1] == str && info[0] == -1 ) 
-        borg[mud] = info;
+#define INFO_DEFAULT	({ \
+    ({ 0, 2 }), ({ 11, 15 }), \
+    ({1, 15}), ({2,5}), ({5, 12}), ({ 9, 17 }) })
+
+
+private nosave string * headers = ({
+    "Up",                                 // 0
+    "Address",                            // 1
+    "",		/* port */                // 2
+    "",		/* TCP OOB port */        // 3
+    "",		/* UDP OOB port */        // 4
+    "Lib",                                // 5
+    "Base Lib",                           // 6
+    "Driver",                             // 7
+    "Type",                               // 8
+    "Open Status",                        // 9
+    "Admin Email",                        // 10
+
+    "Mud",	/* special... mudname. not part of the mud info */
+});
+
+
+private void main(mixed *arg, mapping flags)
+{
+    mapping	mudlist = IMUD_D->query_mudlist();
+    string*	muds = keys(mudlist);
+    string*	matches;
+    int		matched;
+    int		upcount;
+    string	match;
+    mixed*	mudinfo;
+    string	output;
+    mixed *	info;
+    string	format;
+    string	search_str;
+
+    if ( !arg || stringp(arg) )
+    {
+        arg = ({ 0 });
+	flags = ([ ]);
     }
-  }
-  else {
-    borg = ([ ]);
-    foreach( mud, info in (mapping)INTERMUD_D->GetMudList() )
-      if( info[0] == -1 ) borg[mud] = info;
-  }
-  if( !sizeof(borg) ) {
-    write(mud_name()+" does not have any MUD matching "+str+" in "
-          "its mudlist.\n");
-    return 1;
-  }
-  else if( sizeof(borg) == 1 ) {
-    string msg, svc;
-    int val, comma = 0;
-    
-    mud = keys(borg)[0];
-    msg = "\nDetailed information on %^GREEN%^" + mud + "%^RESET%^:\n";
-    msg += "Server: " + borg[mud][7] + " (" + borg[mud][8] + ")\n";
-    msg += "BaseLib: " + borg[mud][6] + "\n";
-    msg += "Library: " + borg[mud][5] + "\n";
-    msg += "Status: " + borg[mud][9] + "\n";
-    msg += "Admin E-mail: " + borg[mud][10] + "\n";
-    msg += "Services: ";
-    foreach(svc, val in borg[mud][11]) {
-      if( val == 1 ) {
-        if( comma ) msg += ", " + svc;
-        else {
-          msg += svc;
-          comma = 1;
-        }
-      }
+
+    if ( !arg[0] )
+	matches = muds;
+    else
+    {
+	matches = insensitive_regexp(muds, "^" + translate(arg[0]));
+	if ( !sizeof(matches) )
+	{
+	    outf("No muds out of %d match that pattern.\n", sizeof(mudlist));
+	    return;
+	}
     }
-    msg += "\nHost: " + borg[mud][1] + "\n";
-    msg += "Telnet port: " + borg[mud][2] + "\n";
-    if( borg[mud][11]["http"] ) 
-      msg += "HTTP port (World Wide Web): " + borg[mud][11]["http"]+"\n";
-    if( borg[mud][11]["ftp"] ) 
-      msg += "FTP port (File Transfer): " + borg[mud][11]["ftp"] + "\n";
-    if( borg[mud][11]["rcp"] )
-      msg += "RCP port (Remote Creator): " + borg[mud][11]["rcp"] + "\n";
-    write(msg);
-    return 1;
-  }
-  list = ({});
-  foreach(mud, info in borg)
-    list += ({ sprintf("%:-15s %:-10s %:-15s %:-15s %s %d",
-                       mud, info[8], info[7], info[5], info[1], info[2]) });
-  list = sort_array(list, 1);
-  list = ({ mud_name() + " recognizes " + sizeof(borg)+" muds"
-              " matching your query: ", "" }) + list;
-  previous_object()->more_string(implode(list, "\n")+"\n", "Mudlist");
-  return 1;
+
+    if ( flags["t"] )
+	info = INFO_MUDTYPE;
+    else if ( flags["d"] )
+	info = INFO_DRIVERTYPE;
+    else
+	info = INFO_DEFAULT;
+
+    search_str = flags["s"];
+    if ( search_str )
+	search_str = lower_case(search_str);
+
+    format = implode(info, (: $1 + sprintf("%%-%ds  ", $2[1]) :), "");
+    format[<1] = '\n';
+
+    matched = sizeof( matches );
+
+    if ( flags["a"] )
+    {
+	upcount = implode(matches, (: $1 + ($(mudlist)[$2][0] == -1) :), 0);
+    }
+    else
+    {
+	matches = filter_array(matches, (: $(mudlist)[$1][0] == -1 :));
+    upcount = sizeof( matches );
+    }
+
+    output = "";
+    if ( wizardp(this_user()) )
+	output += "Type mudinfo <mudname> for more info on a mud.\n";
+    output += sprintf(format + repeat_string("-", 76) + "\n",
+		      map_array(info, (: $(headers)[$1[0]] :))...);
+
+    foreach ( match in sort_array(matches, 1) )
+    {
+        string	line;
+
+	mudinfo = mudlist[match];
+	line = sprintf(format,
+		       mudinfo[0] == -1 ? "U" : "D",
+		       match[0..info[1][1]-1],
+		       map_array(info[2..],
+				 (: ($(mudinfo)[$1[0]]+"")[0..$1[1]-1] :)
+			   )...);
+	if ( search_str )
+	{
+	    if ( regexp(lower_case(line), search_str) )
+	    {
+		output += line;
+	    }
+	    else
+	    {
+		--matched;
+		if ( mudinfo[0] == -1 )
+		    --upcount;
+	    }
+	}
+	else
+	{
+	    output += line;
+	}
+
+    }
+
+    output = sprintf("%d matches out of %d muds. %d %s UP.\n",
+		     matched, sizeof(mudlist), upcount, (upcount == 1) ? "is" : "are") + output;
+
+    out(output);
 }
 
-int alphabet(string a, string b) {
-    if((a = lower_case(a)) == (b = lower_case(b))) return 0;
-    else if(a > b) return 1;
-    else return -1;
-}
-
-void help() {
-    message("help", "Syntax: <mudlist>\n"
-      "        <mudlist -dmn [arg]>\n\n"
-      "Without any arguments, it gives a full listing of all muds "
-      "with which this mud is capable of communication through "
-      "tell, mail, finger, rwho, and other intermud services.  "
-      "With arguments, <mudlist> requires one and only one option "
-      "which must be one of the following:\n"
-      "\t-d [driver]: List only muds using the named driver\n"
-      "\t-m [mudlib]: List only muds using the named mudlib\n"
-      "\t-n [mudname]: List only the muds with the name given\n\n"
-      "Note that the argument need not be complete, for example:\n"
-      "\t mudlist -n idea\n"
-      "will list IdeaExchange as well as any other mud whose name "
-      "begins with the string \"idea\".\n\n"
-      "See also: finger, mail, rwho, tell", this_player());
-}
-
-void clean_up() {
-  destruct(this_object());
-}
-
-void reset() {
-  destruct(this_object());
-}
-
-void dest_me() {
-  destruct(this_object());
+void player_menu_entry()
+{
+  bare_init();
+  main(0, 0);
+  done_outputing();
 }

@@ -1,28 +1,31 @@
-/*  -*- LPC -*-  */
-/*
- * $Locker:  $
- * $Id: bug.c,v 1.3 1998/04/16 12:52:49 pinkfish Exp $
- * $Log: bug.c,v $
- * Revision 1.3  1998/04/16 12:52:49  pinkfish
- * Update to use the new report base inhertiable command.
- *
- * Revision 1.2  1998/02/28 02:47:28  presto
- * fixed destination directory for virtual object bugreps
- *
- * Revision 1.1  1998/01/06 05:29:43  ceres
- * Initial revision
- *
- */
-/**
- * Does this nice bug reporting for the players.  Uses a neato
- * base object whizz bang thing now.
- * @author Pinkfish
- */
+/* Do not remove the headers from this file! see /USAGE for more info. */
 
-inherit "/cmds/report_base";
+// _bug.c
+// Rust wrote it
+// Megaboz@ZorkMUD attached header 5-5-94
+// Converted to use new /std/reporter superclass (Deathblade 4-Sep-94)
+// Beek made one line reports work right 11/14/94
+// Rust made them post news
 
-void create() {
-   ::create();
-   set_error_type("BUG");
-   set_use_last_error(1);
-} /* create() */
+//:PLAYERCOMMAND
+//$$ see: idea, typo, feedback, question
+//USAGE:  bug
+//
+//This command directs a report of a game bug to the proper place.
+
+inherit CMD;
+
+void create()
+{
+  ::create();
+  no_redirection();
+}
+
+private void main(string str){ REPORTER_D->report_something("Bug", str); }
+
+void player_menu_entry()
+{
+  bare_init();
+  main("");
+  done_outputing();
+}

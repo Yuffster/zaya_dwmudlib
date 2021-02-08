@@ -1,56 +1,28 @@
-/**
- * A key object.  This provides a nice easy way to create keys.
- *
- * @author ceres
- */
-inherit "/std/object";
-#include <shops/engrave.h>
+/* Do not remove the headers from this file! see /USAGE for more info. */
 
-/** @ignore yes */
-void create() {
-  do_setup++;
-  ::create();
-  do_setup--;
+inherit OBJ;
+inherit M_GETTABLE;
 
-  set_name("key");
-  set_long("A key.  Wonder where it fits?.\n");
-  add_plural("keys");
-  set_short("key");
-  add_property(ENGRAVE_PROP, 1);
+string key_type;
 
-  if(!do_setup) {
-    this_object()->setup();
-  }
+
+int is_key(){ return 1; }
+
+int indirect_lock_obj_with_obj() { return 1; }
+int indirect_unlock_obj_with_obj() { return 1; }
+
+void set_key_type( string key_t ){ key_type = key_t; }
+
+mixed get_key_type(){ return key_type; }
+
+void mudlib_setup()
+{
+    set_id("key");
 }
 
-/**
- * Setup the key.  This method handles setting up the short, plural,
- * adjectives etc.
- *
- * @param str The short of the key (minus the word 'key')
- * @param prop The key property (should match the lock)
- */
-void set_key( string str, string prop ) {
-  string *bits;
-  int i;
-  set_short( str + " key" );
-  set_main_plural( str + " keys" );
-  set_name( "key" );
-  add_plural( "keys" );
-  bits = explode( str, " " );
-  for( i = 0; i < sizeof( bits ); i ++ ) {
-    add_adjective( bits[i] );
-  }
-  add_property( prop, 1 );
-  set_value( 0 );
-  set_weight( 1 );
-} /* set_key() */
-
-
-/** @ignore yes */
-mixed query_static_auto_load() {
-  if ( base_name(this_object()) + ".c" == __FILE__ )
-    return int_query_static_auto_load();
-  return ([ ]);
+mapping lpscript_attributes()
+{
+  return ([
+    "keytype" : ({ LPSCRIPT_STRING, "setup", "set_key_type" }),
+  ]);
 }
-

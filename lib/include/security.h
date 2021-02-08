@@ -1,7 +1,17 @@
-#ifndef __SYS_SECURITY_H
-#define __SYS_SECURITY_H
+/* Do not remove the headers from this file! see /USAGE for more info. */
 
-#define SECURITY "/secure/security"
-#define ACCESS "/std/basic/security"
+/*
+** security.h -- security related definitions
+**
+*/
 
-#endif /* __SYS_SECURITY_H */
+#ifndef __SECURITY_H__
+#define __SECURITY_H__
+
+#define ACCESS_SAVE	"/data/secure/access"
+#define ACCESS_SAVE_BAK	"/data/secure/access_backup"
+
+#define ACCESS_LOG	"/data/secure/LOG"
+
+
+#endif /* __SECURITY_H__ */

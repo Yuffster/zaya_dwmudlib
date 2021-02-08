@@ -1,49 +1,48 @@
-/**
- * This include file for use with bug, idea and typo report logging.
- */
-#ifndef __SYS__LOG
-/** @ignore yes */
-#define __SYS__LOG
+/* Do not remove the headers from this file! see /USAGE for more info. */
 
+/*
+** log.h -- specifies the available log files
+**
+** All log files go under DIR_LOG.  They are typically written by LOG_D.
+** Note that these are symbolic names for log files.  The LOG_D will
+** actually coordinate their placement.
+**
+** 960102, Deathblade: created
+*/
 
-/**
- * This is the file name into which the errors used to saved.  Depreciated.
- * @ignore yes
- */
-#define ERROR_LOG "ERROR_REPORTS"
-/**
- * This is the file name into which the errors used to saved.  Depreciated.
- * @ignore yes
- */
-#define PLAYER_ERROR_LOG "BUGS"
-/**
- * Where the errors are logged to.
- */
-#define LOG_FILE "/log/ERRORS"
-/**
- * Used to keep track of the mailing list to use when you exit the
- * error system.
- */
-#define TEMP_MAIL_LIST ("/w/" + this_player()->query_name() + "/TEMP_MAIL_LIST")
-/**
- * Used to keep track of the forward list to use when you exit the
- * error system.
- */
-#define TEMP_FORWARD_LIST ("/w/" + this_player()->query_name() + "/TEMP_FORWARD_LIST")
-/**
- * The smart logger.
- */
-#define SMART_LOG "/std/smart_log"
+#ifndef LOG_H
+#define LOG_H
 
-/**
- * Used to keep track of the mail list to use when you exit the
- * error system on the web.
- */
-#define WWW_TEMP_MAIL_LIST "/w/" + user + "/TEMP_MAIL_LIST"
-/**
- * Used to keep track of the forward list to use when you exit the
- * error system on the web.
- */
-#define WWW_TEMP_FORWARD_LIST "/w/" + user + "/TEMP_FORWARD_LIST"
+#define LOG_ADDEMOTE		"addemote"
+#define LOG_AUTODOC		"autodoc"
+#define LOG_BANISH		"banish"
+#define LOG_BUG			"bug"
+#define LOG_CHANNEL		"channel"
+#define LOG_FEEDBACK		"feedback"
+#define LOG_FORCE		"force"
+#define LOG_FTP			"ftp"
+#define LOG_HELP_MISS		"help miss"
+#define LOG_I3_ERROR		"i3 error"
+#define LOG_IDEA		"idea"
+#define LOG_LOGIN		"login"
+#define LOG_LOGIN_FAILURE	"login failure"
+#define LOG_MAIL_ERROR		"mail error"
+#define LOG_NEW_PLAYERS         "new players"
+#define LOG_QUEST		"quest"
+#define LOG_QUESTION		"question"
+#define LOG_QUIT		"quit"
+#define LOG_RCP			"rcp"
+#define LOG_SETNAME             "set_name"
+#define LOG_SHUTDOWN		"shutdown"
+#define LOG_SNOOP		"snoop"
+#define LOG_SOCKET		"socket"
+#define LOG_TODO		"todo"
+#define LOG_TYPO		"typo"
+#define LOG_WALL		"wall"
 
-#endif /* __SYS__LOG */
+/* these are logged to directly */
+#define LOG_FILE_CATCH		"/log/catch"
+#define LOG_FILE_RUNTIME	"/log/runtime"
+#define LOG_FILE_ERROR		"/log/log"
+
+#endif /* LOG_H */

@@ -1,28 +1,35 @@
-/*  -*- LPC -*-  */
+/* Do not remove the headers from this file! see /USAGE for more info. */
+
 /*
- * $Locker:  $
- * $Id: typo.c,v 1.2 1998/04/16 12:52:49 pinkfish Exp $
- * $Log: typo.c,v $
- * Revision 1.2  1998/04/16 12:52:49  pinkfish
- * Update to use the new report base inhertiable command.
- *
- * Revision 1.2  1998/02/28 02:47:28  presto
- * fixed destination directory for virtual object bugreps
- *
- * Revision 1.1  1998/01/06 05:29:43  ceres
- * Initial revision
- *
- */
-/**
- * Does this nice bug reporting for the players.  Uses a neato
- * base object whizz bang thing now.
- * @author Pinkfish
- */
+** typo.c
+**
+** Converted to use new /std/reporter superclass (Deathblade 4-Sep-94)
+** Original by Rust
+** Rust made it post news.
+*/
 
-inherit "/cmds/report_base";
+//:PLAYERCOMMAND
+//$$ see: bug, idea, feedback, question
+//USAGE:  typo
+//
+//This command directs a typo report to the proper place.
 
-void create() {
-   ::create();
-   set_error_type("TYPO");
-   set_use_last_error(0);
-} /* create() */
+inherit CMD;
+
+void create()
+{
+  ::create();
+  no_redirection();
+}
+
+private void main(string str)
+{
+  REPORTER_D->report_something("Typo", str);
+}
+
+void player_menu_entry()
+{
+  bare_init();  
+  main("");
+  done_outputing();
+}
