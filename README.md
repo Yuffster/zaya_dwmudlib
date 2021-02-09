@@ -1,22 +1,21 @@
-Zaya's Notes ====================
-
+# Zaya's Notes
 This is my attempt getting the Discworld mudlib working from an ancient zip file. 
 
-== Why are you doing this?
+## Why are you doing this?
 I like playing around with different mudlibs.
 
-== Debug
+## Debug
 - Replaced FluffOS with 2019 release
 - Added lima lib
 - Confirmed working build
 
-== Setting up MySQL
+## Setting up MySQL
 - Created discworld and error databases
 - Updated MySQL scripts
 - Ran scripts in lib/db
 - Enabled PACKAGE_DB
 
-== Updating the dwlib
+## Updating the dwlib
 - Replaced lib contents with dwlib's
 - Added cmake files for dwlib
 - Enabled PACKAGE_DWLIB
