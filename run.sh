@@ -1,2 +1,2 @@
 #!/bin/bash
-./build/bin/driver config.lima
+./build/bin/driver config.dw

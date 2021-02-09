@@ -7,8 +7,8 @@
  *    94.07.09 - Robocoder - modified to use AVL tree
  */
 
-#ifndef _UID_H_
-#define _UID_H_
+#ifndef _UIDS_H_
+#define _UIDS_H_
 
 struct userid_t {
   char *name;
