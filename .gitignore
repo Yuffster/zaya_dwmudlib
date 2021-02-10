@@ -1,3 +1,4 @@
+driver/src/local_options
 lib/d/*/catch
 lib/log/*
 lib/net/save/*
