@@ -1,31 +1,28 @@
-/* Do not remove the headers from this file! see /USAGE for more info. */
-
+/*  -*- LPC -*-  */
 /*
-** _idea.c
-**
-** Converted to new /std/reporter usage (Deathblade 4-Sep-94).
-** Original by Rust (?)
-*/
+ * $Locker:  $
+ * $Id: idea.c,v 1.2 1998/04/16 12:52:49 pinkfish Exp $
+ * $Log: idea.c,v $
+ * Revision 1.2  1998/04/16 12:52:49  pinkfish
+ * Update to use the new report base inhertiable command.
+ *
+ * Revision 1.2  1998/02/28 02:47:28  presto
+ * fixed destination directory for virtual object bugreps
+ *
+ * Revision 1.1  1998/01/06 05:29:43  ceres
+ * Initial revision
+ *
+ */
+/**
+ * Does this nice bug reporting for the players.  Uses a neato
+ * base object whizz bang thing now.
+ * @author Pinkfish
+ */
 
-//:PLAYERCOMMAND
-//$$ see: bug, typo, feedback, question
-//USAGE:  idea
-//
-//Allows you to document an idea for the administration to see.
+inherit "/cmds/report_base";
 
-inherit CMD;
-
-void create()
-{
-  ::create();
-  no_redirection();
-}
-
-private void main(string str){ REPORTER_D->report_something("Idea", str); }
-
-void player_menu_entry()
-{
-  bare_init();
-  main("");
-  done_outputing();
-}
+void create() {
+   ::create();
+   set_error_type("IDEA");
+   set_use_last_error(0);
+} /* create() */

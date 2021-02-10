@@ -7,7 +7,7 @@
 
 #ifdef USE_MYSQL
 #define USE_OLD_FUNCTIONS
-#include <mysql.h>
+#include </usr/include/mysql/mysql.h>
 #undef USE_OLD_FUNCTIONS
 #endif
 

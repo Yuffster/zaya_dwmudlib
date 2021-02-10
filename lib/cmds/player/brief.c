@@ -1,53 +1,58 @@
-/* Do not remove the headers from this file! see /USAGE for more info. */
-
+/*  -*- LPC -*-  */
 /*
-** brief.c
-**
+ * $Locker:  $
+ * $Id: brief.c,v 1.4 2000/09/27 01:36:02 presto Exp $
+ * $Log: brief.c,v $
+ * Revision 1.4  2000/09/27 01:36:02  presto
+ * Fixed printing "No such option" when it shouldn't
+ *
+ * Revision 1.3  2000/09/02 22:28:22  ceres
+ * Added error mess
+ *
+ * Revision 1.2  1999/02/09 01:36:59  ceres
+ * Forgot to remove some debug info
+ *
+ * Revision 1.4  1999/02/09 00:23:41  ceres
+ * Increased the max email address length to 50.
+ *
+ * Revision 1.2  1999/02/03 00:52:50  pinkfish
+ * Fix it up so you can only enter certain sized bits of data into the fields.
+ *
+ * Revision 1.1  1998/01/06 05:29:43  ceres
+ * Initial revision
+ * 
 */
+inherit "/cmds/base";
 
-//:PLAYERCOMMAND
-//$$ see : verbose
-//USAGE brief
-//      brief on/off
-//
-//Shows or sets whether you are using "brief" mode,
-//which ignores the room descriptions.
-//Use "brief" mode at your own risk - it greatly increases the chance
-//of missing important clues in the room descriptions,
-//and of upsetting creators whose masterpieces of text you are now ignoring.
+#define TP this_player()
 
-#include <playerflags.h>
-#define USAGE "Usage: brief [on|off]\n"
+int cmd(string which, string type) {
+  string t, disp;
 
-inherit CMD;
-
-private string query_setting()
-{
-  return this_body()->test_flag(F_BRIEF) ? "on" : "off";
-}
-
-nomask private void main(string arg)
-{
-  if ( !arg || arg == "" )
-  {
-    out("Brief mode is " + query_setting() + ".\n" + USAGE);
-    return;
+  if(!type) {
+    disp = "Your settings are: ";
+    foreach(t in TP->query_verbose_types())
+      disp += t + (TP->query_verbose(t) ? " (verbose) " : " (brief) ");
+    write(disp + "\n");
   }
 
-  switch ( arg )
-  {
-    case "on":
-	this_body()->set_flag(F_BRIEF);
-	break;
-
-    case "off":
-	this_body()->clear_flag(F_BRIEF);
-	break;
-
-    default:
-	out(USAGE);
-	return;
-    }
-
-    out("Brief mode is now " + query_setting() + ".\n");
+  else if(type == "all") {
+    foreach(t in TP->query_verbose_types())
+      TP->set_verbose(t, which == "verbose");
+    write("Ok\n");
+  } else if(member_array(type, TP->query_verbose_types()) != -1) {
+    TP->set_verbose(type, which == "verbose");
+    write("Ok\n");
+  } else {
+    write("No such option.\n");
+  }
+  return 1;
+  
 }
+
+
+mixed *query_patterns() {
+  return ({ "<word'type'>", (: cmd("brief", $4[0]) :),
+            "", (: cmd("brief", 0) :),
+         });
+} /* query_patterns() */

@@ -8,7 +8,7 @@ mkdir -p build
 cp -f local_options ./driver/src/
 
 cd build
-cmake ../driver -DPACKAGE_UIDS=OFF
+cmake ../driver
 
 make install
 cd ..
