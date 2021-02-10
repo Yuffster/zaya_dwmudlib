@@ -120,6 +120,10 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL
     "-Wno-implicit-fallthrough"
     "-Wno-unused-function"
     "-Wno-unused-result"
+    "-Wno-empty-body"
+    "-Wno-unused-variable"
+    "-Wno-format"
+    "-Wno-format-security"
     # TODO: Code has a lot of implicit zero initializations
     "-Wno-missing-field-initializers"
     # features

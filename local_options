@@ -228,7 +228,7 @@
  *
  * Compat status: easy to simulate and dated.
  */
-#define NO_WIZARDS
+#undef NO_WIZARDS
 
 /* OLD_TYPE_BEHAVIOR: reintroduces a bug in type-checking that effectively
  * renders compile time type checking useless.  For backwards compatibility.
@@ -356,7 +356,7 @@
  * errors.  Unfortunately, you need to have one.  Check the testsuite or
  * other libs for an example.
  */
-#define MUDLIB_ERROR_HANDLER
+#undef MUDLIB_ERROR_HANDLER
 
 /* CONFIG_FILE_DIR specifies a directory in which the driver will search for
  *   config files by default.  If you don't wish to use this define, you may
@@ -840,7 +840,7 @@
  * [NOTE: malloc_debug(6) is a good compromise between efficiency and
  *  completeness of malloc debugging (malloc/free will be about half as fast).]
  */
-#define NEXT_MALLOC_DEBUG
+#undef NEXT_MALLOC_DEBUG
 
 
 /* GET_CHAR_IS_BUFFERED: Normally get_char() is unbuffered.  That is, once
