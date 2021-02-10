@@ -117,6 +117,9 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL
     "-Wno-char-subscripts"
     "-Wno-sign-compare"
     "-Wno-unused-parameter"
+    "-Wno-implicit-fallthrough"
+    "-Wno-unused-function"
+    "-Wno-unused-result"
     # TODO: Code has a lot of implicit zero initializations
     "-Wno-missing-field-initializers"
     # features

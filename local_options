@@ -5,6 +5,9 @@
 #ifndef _OPTIONS_H_
 #define _OPTIONS_H_
 
+
+#define ZAYAS_COMPILE_OPTION
+
 /* 
  * YOU PROBABLY DO NOT WANT TO MODIFY THIS FILE.
  *
@@ -82,7 +85,7 @@
  *   * Incurs a fair amount of overhead (both memory and CPU)
  */
 #undef WRAPPEDMALLOC
-#undef DEBUGMALLOC
+#define DEBUGMALLOC
 
 /* The following add certain bells and whistles to malloc: */
 
@@ -114,7 +117,7 @@
  * bytes per malloc down to 8.  This macro has no effect if DEBUGMALLOC isn't
  * defined.
  */
-#undef DEBUGMALLOC_EXTENSIONS
+#define DEBUGMALLOC_EXTENSIONS
 
 /* CHECK_MEMORY: defining this (in addition to DEBUGMALLOC and
  * DEBUGMALLOC_EXTENSIONS) causes the driver to check for memory
@@ -122,7 +125,7 @@
  * also adds the check_memory() efun.  Takes a considerable ammount
  * more memory.  Mainly for debugging.  
  */
-#undef CHECK_MEMORY
+#define CHECK_MEMORY
 
 /****************************************************************************
  *                          COMPATIBILITY                                   *
@@ -149,7 +152,7 @@
  *
  * Compat status: very archaic, but easy to support.
  */
-#undef HAS_STATUS_TYPE
+#define HAS_STATUS_TYPE
 
 /* explode():
  *
@@ -266,7 +269,7 @@
  *     else, and if you don't know that, you probably don't have any reason
  *     to care about the old meaning).
  */
-#define SENSIBLE_MODIFIERS
+#undef SENSIBLE_MODIFIERS
 
 /****************************************************************************
  *                           MISCELLANEOUS                                  *
@@ -360,7 +363,7 @@
  *   always specify a full path to the config file when starting the driver.
  */
 #ifndef LATTICE
-#define CONFIG_FILE_DIR "/home/atuin/bin"
+#define CONFIG_FILE_DIR "/mud/driver/src"
 #else
 #define CONFIG_FILE_DIR "etc:"
 #endif
@@ -393,7 +396,7 @@
  * PRAGMA_ERROR_CONTEXT:include some text telling where on the line a
  *                      compilation error occured.
  */
-#define DEFAULT_PRAGMAS PRAGMA_WARNINGS + PRAGMA_STRICT_TYPES + PRAGMA_ERROR_CONTEXT
+#define DEFAULT_PRAGMAS PRAGMA_OPTIMIZE + PRAGMA_STRICT_TYPES + PRAGMA_ERROR_CONTEXT
 
 /* supress warnings about unused arguments; only warn about unused local
  * variables.  Makes older code (where argument names were required) compile
@@ -474,7 +477,7 @@
 /* FLUSH_OUTPUT_IMMEDIATELY: Causes output to be written to sockets
  * immediately after being generated.  Useful for debugging.  
  */
-#undef FLUSH_OUTPUT_IMMEDIATELY
+#define FLUSH_OUTPUT_IMMEDIATELY
 
 /* PRIVS: define this if you want object privileges.  Your mudlib must
  *   explicitly make use of this functionality to be useful.  Defining this
@@ -486,7 +489,7 @@
  * [NOTE: for those who'd rather do such things at the mudlib level, look at
  *  the inherits() efun and the 'valid_object' apply to master.]
  */
-#undef PRIVS
+#define PRIVS
 
 /* INTERACTIVE_CATCH_TELL: define this if you want catch_tell called on
  *   interactives as well as NPCs.  If this is defined, user.c will need a
@@ -525,7 +528,7 @@
  *   resolution is 1/60 of a second, then any time less than approxmately 15k
  *   microseconds will resolve to zero (0).
  */
-#undef PROFILE_FUNCTIONS
+#define PROFILE_FUNCTIONS
 
 /* NO_BUFFER_TYPE: if this is #define'd then LPC code using the 'buffer'
  *   type won't be allowed to compile (since the 'buffer' type won't be
@@ -608,7 +611,7 @@
  *   maintenance by the driver.  These mudlib stats are more domain
  *   based than user based, and replaces the traditional wiz_list stats.
  */
-#undef PACKAGE_MUDLIB_STATS
+#define PACKAGE_MUDLIB_STATS
 
 /* PACKAGE_SOCKETS: define this to enable the socket efunctions.  This
  *   causes HAS_SOCKETS to be defined for all LPC objects.
@@ -639,7 +642,7 @@
 #ifdef PACKAGE_DB
 #undef USE_MSQL 
 #undef MSQL
-#define USE_MYSQL 2
+#define USE_MYSQL
 #define MY_SQL
 #endif
 
@@ -771,7 +774,7 @@
  *   out the previous lines of code to an error) eval_instruction() runs about
  *   twice as fast when this is not defined (for the most common eoperators).
  */
-#undef TRACE_CODE
+#define TRACE_CODE
 
 /* HEART_BEAT_CHUNK: The number of heart_beat chunks allocated at a time.
  * A large number wastes memory as some will be sitting around unused, while
