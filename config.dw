@@ -33,8 +33,11 @@ name : zaya_wibble
 # [ optional ]	
 #	
 # This will be the port number that your users will connect to	
-#	
-external_port_1: websocket 7878
+#
+
+port number : 4242
+	
+external_port_2: websocket 7878
 websocket http dir: ../build/bin/www
 
 #	
