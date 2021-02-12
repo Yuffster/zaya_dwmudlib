@@ -5,7 +5,7 @@ rm -rf build
 mkdir -p build
 
 # fix me, should use cmake variables
-cp -f local_options ./driver/src/
+cp -f config.build  ./driver/src/local_options
 
 cd build
 cmake ../driver
