@@ -1343,7 +1343,7 @@ mixed add_to_queue(string event) {
  */
 mixed display_terms(string event) {
   write(LOGIN_HANDLER->get_message(FILE_PATH+ "/TERMS"));
-  call_out("terms_delayed", 30);
+  call_out("terms_delayed", 1);
   return "ok";
 }
 
