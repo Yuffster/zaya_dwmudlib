@@ -38,7 +38,7 @@
 /**
  * The user to use to connect to mysql.
  */
-#define CONFIG_DB_USER "ddt"
+#define CONFIG_DB_USER "root"
 
 /**
  * The web address to use for the site.
