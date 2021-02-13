@@ -26,6 +26,11 @@ The following log files may exist:
 ./lib/log/{DOMAIN}
 ./lib/log/REBOOT
 
+This can be useful:
+``bash
+tail -f <logfile>
+``
+
 = To Do
 [ ] Log queued commands / wait time
 
