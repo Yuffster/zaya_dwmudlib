@@ -32,3 +32,4 @@ tail -f <logfile>
 
 ## To Do
 - [ ] Log queued commands / wait time
+- [ ] Log calls to parser
