@@ -1,4 +1,4 @@
-- # Debug Notes
+# Debug Notes
 - [ ] Nuke everything!!!!
 - [ ] Delete .gitignores (find added files, changes to config, etc.)
 - [ ] Drop / Create MySQL databases
