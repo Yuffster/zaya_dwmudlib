@@ -11,9 +11,14 @@
 - [ ] Break things and see where they log
 
 ## Save files
-You should be able to find them with this:
+Make sure the directories the code looks for exist. You should be able to find them with this:
 ```bash
 grep -r "#define SAVE_FILE" .
+```
+
+Some folders need a directory for a-z. 
+```bash
+mkdir -p save/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z}
 ```
 
 ## Watch the logs 
