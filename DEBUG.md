@@ -20,9 +20,9 @@ grep -r "#define SAVE_FILE" .
 Ubuntu: [Viewing and Monitoring Log Files](https://ubuntu.com/tutorials/viewing-and-monitoring-log-files#2-log-files-locations)
 
 Use this to find recently modified files in current directory.
-``bash
+```bash
 find -mtime -1 -print
-``
+```
 
 The following log files may exist:
 - ./lib/d/*/{warnings|errors|catch|runtime} 
